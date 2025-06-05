@@ -1,16 +1,15 @@
 import os
-from logger import logger
 
 apps = os.getenv("APPS").split(',')
 
 token=os.getenv("API_TOKEN")
 if not token:
-    logger.critical("API_TOKEN environment variable is not set. Please set it to your API token.")
+    print("API_TOKEN environment variable is not set. Please set it to your API token.")
     exit(1)
 
 baseUrl= os.getenv("API_URL", "http://localhost:8000")
 if not baseUrl:
-    logger.critical("API_URL environment variable is not set. Please set it to the base URL of your API.")
+    print("API_URL environment variable is not set. Please set it to the base URL of your API.")
     exit(1)
 if baseUrl.endswith('/'):
     baseUrl = baseUrl[:-1]
