@@ -19,3 +19,7 @@ jobs:
   docker-build:
     uses: ./.github/workflows/docker-build.yml
     needs: run-check
+
+  run-test:
+    uses: ./.github/workflows/test.yml
+    needs: docker-build

@@ -1,0 +1,25 @@
+name: Test Monitor and Unicorn Server
+on:
+  workflow_call:
+    secrets:
+      API_TOKEN:
+        required: true
+
+jobs:
+  run-containers:
+    needs: docker-build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull Unicorn Server image
+        run: docker pull ghcr.io/${{ github.repository_owner }}/python:latest
+
+      - name: Run Unicorn Server container
+        run: |
+          docker run -d --name unicorn-server -p 8000:8000 ghcr.io/${{ github.repository_owner }}/python:latest
+
+      - name: Pull Monitor image
+        run: docker pull ghcr.io/${{ github.repository_owner }}/python:latest
+
+      - name: Run Monitor container
+        run: |
+          docker run -d --name monitor-container ghcr.io/${{ github.repository_owner }}/python:latest API_TOKEN=${{ secrets.API_TOKEN }} python monitor.py
