@@ -11,6 +11,9 @@ def check_app_status(app_name: str):
         response = requests.get(url, headers=headers, timeout=10)
         response.raise_for_status()
         return response.json()
+    except requests.exceptions.ConnectionError:
+        logger.error(f"Connection error while checking status for {app_name} at {url}")
+        return None
     except requests.exceptions.RequestException as e:
         logger.error(f"Error checking status for {app_name}: Status code: {response.status_code}, Error: {e}")
         return None

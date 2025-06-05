@@ -13,11 +13,11 @@ jobs:
       - name: Pull Unicorn Server image
         run: docker pull ghcr.io/${{ github.repository_owner }}/python:latest
 
-      - name: Run Unicorn Server container
-        run: docker run -d --name unicorn-server -p 8000:8000 ghcr.io/${{ github.repository_owner }}/python:latest
+      - name: Create Docker network
+        run: docker network create my-network || true
 
-      - name: Pull Monitor image
-        run: docker pull ghcr.io/${{ github.repository_owner }}/python:latest
+      - name: Run Unicorn Server container
+        run: docker run -d --name unicorn-server --network my-network -p 8000:8000 ghcr.io/${{ github.repository_owner }}/python:latest
 
       - name: Run Monitor container
-        run: docker run --name monitor-container -e API_TOKEN=${{ secrets.API_TOKEN }} ghcr.io/${{ github.repository_owner }}/python:latest python monitor.py
+        run: docker run --name monitor-container --network my-network -e API_TOKEN=${{ secrets.API_TOKEN }} ghcr.io/${{ github.repository_owner }}/python:latest python monitor.py
