@@ -1,6 +1,6 @@
 import os
 
-apps = os.getenv("APPS").split(',')
+apps = os.getenv("APPS", "").split(',')
 
 token=os.getenv("API_TOKEN")
 if not token:
