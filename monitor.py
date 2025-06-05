@@ -2,7 +2,7 @@ import requests
 from logger import logger
 from config import baseUrl, token, apps
 
-def check_app_status(app_name):
+def check_app_status(app_name: str):
     url = f'{baseUrl}/status?app={app_name}'
     headers = {'Authorization': f'Bearer {token}'}
     logger.info(f"Checking status for {app_name} at {url} and bearer {token.replace(token, '****')}")
