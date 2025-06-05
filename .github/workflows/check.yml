@@ -26,3 +26,5 @@ jobs:
 
     - name: Run code checks
       run: python check_code.py
+      env:
+        API_TOKEN: ${{ secrets.API_TOKEN }}
