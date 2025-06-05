@@ -26,5 +26,8 @@ jobs:
       - name: Run Unicorn Server container
         run: docker run -d --name unicorn-server --network my-network -p 8000:8000 ghcr.io/${{ github.repository_owner }}/python:latest
 
+      - name: Wait for Unicorn Server to start
+        run: sleep 10
+
       - name: Run Monitor container
         run: docker run --name monitor-container --network my-network -e API_URL=${{ vars.API_URL }} -e APPS=${{ vars.APPS }} -e API_TOKEN=${{ secrets.API_TOKEN }} ghcr.io/${{ github.repository_owner }}/python:latest python monitor.py
