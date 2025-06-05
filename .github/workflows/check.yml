@@ -1,10 +1,7 @@
 name: Check Code
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  workflow_call:
 
 jobs:
   code-check:
