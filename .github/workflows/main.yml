@@ -9,7 +9,9 @@ on:
 jobs:
   run-check:
     uses: ./.github/workflows/check.yml
-
+    secrets:
+      API_TOKEN: ${{ secrets.API_TOKEN }}
+      
   docker-build:
     uses: ./.github/workflows/docker-build.yml
     needs: run-check

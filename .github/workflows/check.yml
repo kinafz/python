@@ -2,6 +2,9 @@ name: Check Code
 
 on:
   workflow_call:
+    secrets:
+    API_TOKEN:
+      required: true
 
 jobs:
   code-check:
