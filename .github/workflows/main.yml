@@ -6,12 +6,16 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   run-check:
     uses: ./.github/workflows/check.yml
     secrets:
       API_TOKEN: ${{ secrets.API_TOKEN }}
-      
+
   docker-build:
     uses: ./.github/workflows/docker-build.yml
     needs: run-check
