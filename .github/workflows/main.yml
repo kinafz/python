@@ -25,3 +25,4 @@ jobs:
     needs: docker-build
     secrets:
       API_TOKEN: ${{ secrets.API_TOKEN }}
+      APPS: ${{ secrets.APPS }}
