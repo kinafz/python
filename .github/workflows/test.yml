@@ -12,6 +12,21 @@ on:
       API_URL:
         required: true
         type: string
+      DB_NAME:
+        required: true
+        type: string
+      DB_HOST:
+        required: true
+        type: string
+      DB_PASSWORD:
+        required: true
+        type: string
+      DB_PORT:
+        required: true
+        type: string
+      API_USER:
+        required: true
+        type: string
 
 jobs:
   run-containers:
@@ -23,11 +38,30 @@ jobs:
       - name: Create Docker network
         run: docker network create my-network || true
 
+      - name: Run Postgresql Server container
+        run: docker run -d --name pg --network my-network -p 5432:5432 -e POSTGRES_DB=${{ vars.DB_NAME }} -e POSTGRES_USER=${{ vars.DB_USER }} -e POSTGRES_PASSWORD=${{ vars.DB_PASSWORD }} postgres:17-alpine
+
       - name: Run Unicorn Server container
         run: docker run -d --name unicorn-server --network my-network -p 8000:8000 ghcr.io/${{ github.repository_owner }}/python:latest
 
-      - name: Wait for Unicorn Server to start
-        run: sleep 10
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          echo "Waiting for PostgreSQL to be ready..."
+          for i in {1..30}; do
+            if docker exec pg pg_isready -U ${{ vars.DB_USER }} > /dev/null 2>&1; then
+              echo "PostgreSQL is ready!"
+              break
+            else
+              echo "Waiting ($i)..."
+              sleep 1
+            fi
+          done
+
+          # Fail if PostgreSQL isn't ready after 30s
+          if ! docker exec pg pg_isready -U ${{ vars.DB_USER }} > /dev/null 2>&1; then
+            echo "PostgreSQL did not become ready in time"
+            exit 1
+          fi
 
       - name: Run Monitor container
-        run: docker run --name monitor-container --network my-network -e API_URL=${{ vars.API_URL }} -e APPS=${{ vars.APPS }} -e API_TOKEN=${{ secrets.API_TOKEN }} ghcr.io/${{ github.repository_owner }}/python:latest python monitor.py
+        run: docker run --name monitor-container --network my-network -e DB_USER=${{ vars.DB_USER }} -e DB_PASSWORD=${{ vars.DB_PASSWORD }} -e DB_HOST=${{ vars.DB_HOST }} -e DB_PORT=${{ vars.DB_PORT }} -e DB_NAME=${{ vars.DB_NAME }} -e API_URL=${{ vars.API_URL }} -e APPS=${{ vars.APPS }} -e API_TOKEN=${{ secrets.API_TOKEN }} ghcr.io/${{ github.repository_owner }}/python:latest python monitor.py

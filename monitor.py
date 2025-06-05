@@ -1,6 +1,7 @@
 import requests
 from logger import logger
 from config import baseUrl, token, apps
+import db
 
 def check_app_status(app_name: str):
     url = f'{baseUrl}/status?app={app_name}'
@@ -24,6 +25,7 @@ def checkAllStatus():
         status = check_app_status(app)
         if status:
             logger.info(f"Status for {app}: {status}")
+            db.insert_data(app_name=app, status=status.get('status', 'unknown'), response_time=status.get('response_time', 0))
         else:
             logger.error(f"Failed to retrieve status for {app}")
             
