@@ -27,3 +27,4 @@ jobs:
       API_TOKEN: ${{ secrets.API_TOKEN }}
     with:
       APPS: ${{ vars.APPS }}
+      API_URL: ${{ vars.API_URL }}

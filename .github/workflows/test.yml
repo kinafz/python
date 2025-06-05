@@ -9,6 +9,9 @@ on:
       APPS:
         required: true
         type: string
+      API_URL:
+        required: true
+        type: string
 
 jobs:
   run-containers:
@@ -24,4 +27,4 @@ jobs:
         run: docker run -d --name unicorn-server --network my-network -p 8000:8000 ghcr.io/${{ github.repository_owner }}/python:latest
 
       - name: Run Monitor container
-        run: docker run --name monitor-container --network my-network -e APPS=${{ vars.APPS }} -e API_TOKEN=${{ secrets.API_TOKEN }} ghcr.io/${{ github.repository_owner }}/python:latest python monitor.py
+        run: docker run --name monitor-container --network my-network -e API_URL=${{ vars.API_URL }} -e APPS=${{ vars.APPS }} -e API_TOKEN=${{ secrets.API_TOKEN }} ghcr.io/${{ github.repository_owner }}/python:latest python monitor.py
