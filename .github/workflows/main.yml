@@ -23,3 +23,5 @@ jobs:
   run-test:
     uses: ./.github/workflows/test.yml
     needs: docker-build
+    secrets:
+      API_TOKEN: ${{ secrets.API_TOKEN }}
