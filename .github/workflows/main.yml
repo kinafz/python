@@ -25,11 +25,11 @@ jobs:
     needs: docker-build
     secrets:
       API_TOKEN: ${{ secrets.API_TOKEN }}
+      DB_PASSWORD: ${{ vars.DB_PASSWORD }}
     with:
       APPS: ${{ vars.APPS }}
       API_URL: ${{ vars.API_URL }}
       DB_NAME: ${{ vars.DB_NAME }}
       DB_HOST: ${{ vars.DB_HOST }}  
-      DB_PASSWORD: ${{ vars.DB_PASSWORD }}
       DB_PORT: ${{ vars.DB_PORT }}
       API_USER: ${{ vars.API_USER }}

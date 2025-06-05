@@ -5,6 +5,8 @@ on:
     secrets:
       API_TOKEN:
         required: true
+      DB_PASSWORD:
+        required: true
     inputs:
       APPS:
         required: true
@@ -16,9 +18,6 @@ on:
         required: true
         type: string
       DB_HOST:
-        required: true
-        type: string
-      DB_PASSWORD:
         required: true
         type: string
       DB_PORT:
